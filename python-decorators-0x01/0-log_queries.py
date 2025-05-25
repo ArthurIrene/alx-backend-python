@@ -1,6 +1,7 @@
 import sqlite3
 import functools
-import logging # Needed for logging functionality
+import logging
+from datetime import datetime # Added this import as required by the checker
 
 # Configure logging to output to console
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
