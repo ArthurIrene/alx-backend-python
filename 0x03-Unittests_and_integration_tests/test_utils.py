@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import unittest
 from parameterized import parameterized 
-from utils import access_nested_map
+from utils import access_nested_map , get_json
+from unittest import mock
 
 class TestAccessNestedMap(unittest.TestCase):
     @parameterized.expand([
@@ -24,3 +25,15 @@ class TestAccessNestedMap(unittest.TestCase):
 
         self.assertEqual(context_manager.exception.args[0], result)
         pass    
+class TestGetJson(unittest.TestCase):
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}), # First tuple
+        ("http://holberton.io", {"payload": False})  # Second tuple
+    ])
+    @mock.patch('utils.requests.get')
+    def test_get_json(self, test_url, test_payload, mock_requests_get):
+        mock_requests_get.return_value = mock.Mock()
+        mock_requests_get.return_value.json.return_value = test_payload
+        real_result = get_json(test_url)
+        self.assertEqual(real_result, test_payload)
+        mock_requests_get.assert_called_once_with(test_url)
